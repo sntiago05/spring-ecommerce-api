@@ -1,12 +1,14 @@
-package com.sntiago05.ecommerceapi.user;
+package com.sntiago05.ecommerceapi.user.service;
 
 import com.sntiago05.ecommerceapi.config.JwtService;
+import com.sntiago05.ecommerceapi.user.entity.User;
 import com.sntiago05.ecommerceapi.user.dto.LoginRequest;
 import com.sntiago05.ecommerceapi.user.dto.RegisterRequest;
+import com.sntiago05.ecommerceapi.user.repository.UserRepository;
+import com.sntiago05.ecommerceapi.user.entity.UserRole;
 import com.sntiago05.ecommerceapi.user.exceptions.UserEmailConflictException;
 import com.sntiago05.ecommerceapi.user.exceptions.UserInvalidCredentialsException;
 import lombok.AllArgsConstructor;
-import org.springframework.scheduling.config.Task;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
