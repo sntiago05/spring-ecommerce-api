@@ -23,11 +23,10 @@ public class ProductService {
     }
 
     @Transactional
-    public Product decreaseStock(Long id, Integer stock) {
+    public void decreaseStock(Long id, Integer stock) {
         Product product = repository.findByIdForUpdate(id).orElseThrow(() -> new ProductNotFoundException(id));
         if (product.getStock() < stock) throw new ProductOutOfStockException(product.getName());
         product.setStock(product.getStock() - stock);
-        return product;
     }
 
     public Product findById(Long id) {

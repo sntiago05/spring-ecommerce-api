@@ -1,7 +1,8 @@
 services:
   postgres:
     image: postgres:16
-    container_name: ecommerce-api
+    container_name: ecommerce-postgres
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ecommercedb
       POSTGRES_USER: santiago
@@ -15,5 +16,13 @@ services:
     container_name: ecommerce-redis
     ports:
       - "6379:6379"
+    restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ecommerce-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
 volumes:
    postgres_data:

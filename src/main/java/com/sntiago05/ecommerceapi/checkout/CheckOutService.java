@@ -15,7 +15,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 @Service
@@ -50,16 +49,16 @@ public class CheckOutService {
         Order newOrder = orderService.saveOrder(order);
         cart.getItems().clear();
 
-        eventPublisher.publishEvent(createEvent(newOrder, cart, order));
+        eventPublisher.publishEvent(createEvent(newOrder, cart));
         return newOrder;
     }
 
-    private @NonNull OrderEvent createEvent(Order newOrder, Cart cart, Order order) {
+    private @NonNull OrderEvent createEvent(Order newOrder, Cart cart) {
         return new OrderEvent(newOrder.getId(), cart.getUser().getUsername(), cart.getUser().getEmail(), newOrder.getItems().stream().map(item -> new OrderItemEvent(
                 item.getProduct().getId(),
                 item.getProduct().getName(),
                 item.getQuantity(),
                 item.getSubtotal()
-        )).toList(), order.getTotal());
+        )).toList(), newOrder.getTotal());
     }
 }
