@@ -1,7 +1,10 @@
 package com.sntiago05.ecommerceapi.product.exceptions;
 
-public class ProductOutOfStockException extends RuntimeException {
+import com.sntiago05.ecommerceapi.exception.BusinessException;
+import org.springframework.http.HttpStatus;
+
+public class ProductOutOfStockException extends BusinessException {
     public ProductOutOfStockException(String name) {
-        super("product "+name+" is out of stock");
+        super("product "+name+" is out of stock", HttpStatus.CONFLICT);
     }
 }

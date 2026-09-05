@@ -1,7 +1,10 @@
 package com.sntiago05.ecommerceapi.user.exceptions;
 
-public class UserInvalidCredentialsException extends RuntimeException {
+import com.sntiago05.ecommerceapi.exception.BusinessException;
+import org.springframework.http.HttpStatus;
+
+public class UserInvalidCredentialsException extends BusinessException {
     public UserInvalidCredentialsException() {
-        super("User Invalid Credentials");
+        super("User Invalid Credentials", HttpStatus.UNAUTHORIZED);
     }
 }

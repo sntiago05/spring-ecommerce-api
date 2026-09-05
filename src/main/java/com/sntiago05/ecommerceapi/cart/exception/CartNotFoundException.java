@@ -1,7 +1,10 @@
 package com.sntiago05.ecommerceapi.cart.exception;
 
-public class CartNotFoundException extends RuntimeException {
-    public CartNotFoundException(Long id) {
-        super("cart not found with id: " + id);
+import com.sntiago05.ecommerceapi.exception.BusinessException;
+import org.springframework.http.HttpStatus;
+
+public class CartNotFoundException extends BusinessException {
+    public CartNotFoundException() {
+        super("cart not found " , HttpStatus.NOT_FOUND);
     }
 }

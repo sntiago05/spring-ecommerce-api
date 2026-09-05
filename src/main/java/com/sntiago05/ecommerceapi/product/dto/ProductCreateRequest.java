@@ -1,12 +1,13 @@
 package com.sntiago05.ecommerceapi.product.dto;
 
+import com.sntiago05.ecommerceapi.product.entity.Product;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
 public record ProductCreateRequest(
         @NotBlank
-        @Size(min = 8, max = 50)
+        @Size( max = 50)
         String name,
         @NotBlank
         @Size(max = 250)
@@ -20,4 +21,11 @@ public record ProductCreateRequest(
         Integer stock
 
 ) {
+        public static Product toEntity(ProductCreateRequest request) {
+                return Product.builder().name(request.name())
+                        .description(request.description())
+                        .price(request.price())
+                        .stock(request.stock())
+                        .build();
+        }
 }

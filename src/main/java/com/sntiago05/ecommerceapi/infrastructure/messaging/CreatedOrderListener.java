@@ -17,7 +17,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class CreatedOrderListener {
     private final RabbitTemplate rabbitTemplate;
     private final RabbitProperties rabbitProperties;
-     @Value("${app.rabbitmq.routing-key.order-created}")
+     @Value("${app.rabbitmq.routing-key-order-created}")
     private String routingKey;
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onCreatedOrder(OrderEvent event) {

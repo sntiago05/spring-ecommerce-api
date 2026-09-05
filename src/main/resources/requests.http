@@ -1,0 +1,26 @@
+### Checkout exitoso para el carrito 1
+POST http://localhost:8080/checkout/1
+Accept: application/json
+
+### Intentar checkout del mismo carrito (debe fallar porque ya quedó vacío)
+POST http://localhost:8080/checkout/1
+Accept: application/json
+
+### 1. Registrar nuevo usuario (crea usuario y carrito)
+POST http://localhost:8080/auth/register
+Content-Type: application/json
+
+{
+  "userName": "santiago",
+  "email": "santiago@test.com",
+  "password": "password123"
+}
+
+### 2. Iniciar sesión y obtener token JWT
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "santiago@test.com",
+  "password": "password123"
+}

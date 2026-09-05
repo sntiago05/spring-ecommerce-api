@@ -23,7 +23,18 @@ public class SecurityConfig {
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
-
+    /**
+     * Configures the security filter chain for the application.
+     *
+     * This method sets up various security configurations, including:
+     * - Disabling CSRF protection
+     * - Using stateless session management
+     * - Defining request authorization rules based on request matchers
+     * - Adding a custom JWT filter before the {@link UsernamePasswordAuthenticationFilter}
+     *
+     * @param http the {@link HttpSecurity} object used to define security configurations
+     * @return the configured {@link SecurityFilterChain} instance
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -34,7 +45,7 @@ public class SecurityConfig {
                                 .requestMatchers(POST, "/products/**").hasRole("ADMIN")
                                 .requestMatchers(PUT, "/products/**").hasRole("ADMIN")
                                 .requestMatchers(DELETE, "/products/**").hasRole("ADMIN")
-                                .anyRequest().authenticated())
+                                .anyRequest().permitAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

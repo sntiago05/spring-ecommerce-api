@@ -1,27 +1,49 @@
 package com.sntiago05.ecommerceapi.exception;
 
-import com.sntiago05.ecommerceapi.product.exceptions.ProductConflictException;
-import com.sntiago05.ecommerceapi.user.exceptions.UserEmailConflictException;
-import com.sntiago05.ecommerceapi.user.exceptions.UserInvalidCredentialsException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
+
+@Slf4j
 @RestControllerAdvice
 public class GlobalHandlerExeception {
-    @ExceptionHandler(UserEmailConflictException.class)
-    public ResponseEntity<String> handleUserEmailConflictException(UserEmailConflictException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+
+    @ExceptionHandler(BusinessException.class)
+    public ProblemDetail handleBusinessException(BusinessException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(ex.getHttpStatus(), ex.getMessage());
+        problemDetail.setTitle("Business Error");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
     }
 
-    @ExceptionHandler(UserInvalidCredentialsException.class)
-    public ResponseEntity<String> handleUserInvalidCredentialsException(UserInvalidCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ProblemDetail handleValidationException(MethodArgumentNotValidException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Validation failed");
+        problemDetail.setTitle("Validation Error");
+        
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> 
+            errors.put(error.getField(), error.getDefaultMessage())
+        );
+        problemDetail.setProperty("errors", errors);
+        problemDetail.setProperty("timestamp", Instant.now());
+        
+        return problemDetail;
     }
 
-    @ExceptionHandler(ProductConflictException.class)
-    public ResponseEntity<String> handleProductConflictException(ProductConflictException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handleException(Exception ex) {
+        log.error(ex.getMessage(), ex);
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+        problemDetail.setTitle("Internal Server Error");
+        problemDetail.setProperty("timestamp", Instant.now());
+        return problemDetail;
     }
 }

@@ -1,6 +1,6 @@
 package com.sntiago05.ecommerceapi.config;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(RabbitProperties.class)
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RabbitConfig {
     private final RabbitProperties properties;
 
