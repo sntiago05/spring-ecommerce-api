@@ -1,6 +1,5 @@
 package com.sntiago05.ecommerceapi.order.dto;
 
-import com.sntiago05.ecommerceapi.order.entity.Order;
 import com.sntiago05.ecommerceapi.order.entity.OrderItem;
 
 import java.math.BigDecimal;
@@ -10,7 +9,7 @@ public record OrderItemResponse(
         String productName,
         Integer quantity,
         BigDecimal unitPrice,
-        BigDecimal subtoTotal
+        BigDecimal subTotal
 
 ) {
     public static OrderItemResponse fromEntity(OrderItem item) {
@@ -18,6 +17,6 @@ public record OrderItemResponse(
                 item.getProduct().getName(),
                 item.getQuantity(),
                 item.getUnitPrice(),
-                item.getSubtotal());
+                item.getSubTotal());
     }
 }

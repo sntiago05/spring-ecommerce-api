@@ -20,7 +20,7 @@ public class OrderItem {
     @JoinColumn(name = "product_id")
     private Product product;
     @Column(precision = 10, scale = 2)
-    private BigDecimal subtotal;
+    private BigDecimal subTotal;
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

@@ -26,6 +26,7 @@ public record ProductCreateRequest(
                         .description(request.description())
                         .price(request.price())
                         .stock(request.stock())
+                        .active(true)
                         .build();
         }
 }

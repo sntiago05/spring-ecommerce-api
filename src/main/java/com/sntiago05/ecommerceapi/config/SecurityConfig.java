@@ -23,9 +23,10 @@ public class SecurityConfig {
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
+
     /**
      * Configures the security filter chain for the application.
-     *
+     * <p>
      * This method sets up various security configurations, including:
      * - Disabling CSRF protection
      * - Using stateless session management
@@ -41,9 +42,11 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a ->
                         a.requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/cart/**").authenticated()
+                                .requestMatchers("/checkout/**").authenticated()
                                 .requestMatchers(GET, "/products/**").authenticated()
                                 .requestMatchers(POST, "/products/**").hasRole("ADMIN")
-                                .requestMatchers(PUT, "/products/**").hasRole("ADMIN")
+                                .requestMatchers(PATCH, "/products/**").hasRole("ADMIN")
                                 .requestMatchers(DELETE, "/products/**").hasRole("ADMIN")
                                 .anyRequest().permitAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

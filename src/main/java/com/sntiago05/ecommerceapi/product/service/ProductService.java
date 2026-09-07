@@ -11,7 +11,6 @@ import com.sntiago05.ecommerceapi.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,21 +37,29 @@ public class ProductService {
     /**
      * Decreases the stock of a specific product by the specified amount.
      *
-     * @param id    the unique identifier of the product whose stock is to be decreased
-     * @param stock the quantity to decrease from the product's stock
+     * @param id       the unique identifier of the product whose stock is to be decreased
+     * @param quantity the quantity to decrease from the product's stock
      * @throws ProductNotFoundException   if no product exists with the given id
      * @throws ProductOutOfStockException if the current stock is less than the specified quantity to decrease
      */
     @Transactional
-    public void decreaseStock(Long id, Integer stock) {
+    public void decreaseStock(Long id, Integer quantity) {
         Product product = repository.findByIdForUpdate(id).orElseThrow(() -> new ProductNotFoundException(id));
-        if (product.getStock() < stock) throw new ProductOutOfStockException(product.getName());
-        product.setStock(product.getStock() - stock);
+        if (product.getStock() < quantity) throw new ProductOutOfStockException(product.getName());
+        product.setStock(product.getStock() - quantity);
     }
 
+    /**
+     * only for internal usage
+     */
     public Product findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        return repository.findByIdAndActiveTrue(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
+
+    public ProductResponse findByIdResponse(Long id) {
+        return ProductResponse.fromEntity(findById(id));
+    }
+
 
     /**
      * Retrieves a paginated list of all products wrapped in a {@code Page} object.
@@ -63,7 +70,6 @@ public class ProductService {
      */
     @Transactional(readOnly = true)
     public Page<ProductResponse> findAll(Pageable pageable) {
-
         return repository.findByActiveTrue(pageable).map(ProductResponse::fromEntity);
     }
 

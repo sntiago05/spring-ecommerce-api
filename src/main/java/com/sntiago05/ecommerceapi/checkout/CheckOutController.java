@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class CheckOutController {
     private final CheckOutService service;
 
-    @PostMapping("{cartId}")
-    public ResponseEntity<OrderResponse> oncheckOut(@PathVariable Long cartId) {
-        OrderResponse response = service.processCheckOut(cartId);
+    @PostMapping
+    public ResponseEntity<OrderResponse> oncheckOut() {
+        OrderResponse response = service.processCheckOut();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
