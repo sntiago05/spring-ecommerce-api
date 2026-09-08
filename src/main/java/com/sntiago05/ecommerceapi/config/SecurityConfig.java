@@ -53,6 +53,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a ->
                         a.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
                                 .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/v3/api-docs", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                 .requestMatchers("/cart/**").authenticated()
                                 .requestMatchers("/checkout/**").authenticated()
                                 .requestMatchers("/orders/**").authenticated()
