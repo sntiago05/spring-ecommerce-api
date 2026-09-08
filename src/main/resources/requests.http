@@ -1,13 +1,14 @@
-### Checkout exitoso para el carrito 1
-POST http://localhost:8080/checkout/1
-Accept: application/json
+@baseUrl = http://localhost:8080
+@token = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYW50aWFnb0B0ZXN0LmNvbSIsInJvbGUiOiJDVVNUT01FUiIsImlhdCI6MTc4ODgyNjA3OCwiZXhwIjoxNzg4ODI2OTc4fQ.zPV3fjWCfdkx9dqtiLsNqmuo1Pxlx6IKxFB1Iex2L1xYMfh5juoRjsIZ-q2KVikngRyuC_sJ7io7vw18AWjF9w
 
-### Intentar checkout del mismo carrito (debe fallar porque ya quedó vacío)
-POST http://localhost:8080/checkout/1
-Accept: application/json
 
-### 1. Registrar nuevo usuario (crea usuario y carrito)
-POST http://localhost:8080/auth/register
+### ==========================================
+### AUTH
+### ==========================================
+
+### 1. Registrar usuario
+### Crea User + Cart
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
@@ -16,11 +17,144 @@ Content-Type: application/json
   "password": "password123"
 }
 
-### 2. Iniciar sesión y obtener token JWT
-POST http://localhost:8080/auth/login
+
+### 2. Login
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
   "email": "santiago@test.com",
   "password": "password123"
 }
+
+
+### ==========================================
+### PRODUCTS
+### ==========================================
+
+### 3. Obtener productos
+GET {{baseUrl}}/products
+Authorization: Bearer {{token}}
+Accept: application/json
+
+
+### 4. Obtener producto específico
+GET {{baseUrl}}/products/1
+Authorization: Bearer {{token}}
+Accept: application/json
+
+
+### ==========================================
+### CART
+### ==========================================
+
+### 5. Obtener mi carrito
+GET {{baseUrl}}/cart
+Authorization: Bearer {{token}}
+Accept: application/json
+
+
+### 6. Agregar Laptop x2
+POST {{baseUrl}}/cart
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 2
+}
+
+
+### 7. Agregar Mouse x3
+POST {{baseUrl}}/cart
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 2,
+  "quantity": 3
+}
+
+
+### 8. Consultar carrito
+GET {{baseUrl}}/cart
+Authorization: Bearer {{token}}
+Accept: application/json
+
+
+### 9. Actualizar cantidad de un CartItem
+### Cambia el ID según el CartItem creado
+PATCH {{baseUrl}}/cart/items/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "quantity": 1
+}
+
+
+### 10. Eliminar un CartItem
+### Cambia el ID según corresponda
+DELETE {{baseUrl}}/cart/items/1
+Authorization: Bearer {{token}}
+
+
+### 11. Vaciar carrito
+DELETE {{baseUrl}}/cart
+Authorization: Bearer {{token}}
+
+
+### ==========================================
+### CHECKOUT
+### ==========================================
+
+### 12. Checkout exitoso
+### NO necesita cartId
+POST {{baseUrl}}/checkout
+Authorization: Bearer {{token}}
+Accept: application/json
+
+
+### 13. Intentar checkout nuevamente
+### Debe fallar porque el carrito quedó vacío
+POST {{baseUrl}}/checkout
+Authorization: Bearer {{token}}
+Accept: application/json
+
+
+### ==========================================
+### ORDERS
+### ==========================================
+
+### 14. Consultar mis órdenes
+GET {{baseUrl}}/orders
+Authorization: Bearer {{token}}
+Accept: application/json
+### 15. Agregar producto sin stock
+POST {{baseUrl}}/cart
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "productId": 5,
+  "quantity": 1
+}
+
+
+### 16. Checkout con producto sin stock
+### Debe fallar
+POST {{baseUrl}}/checkout
+Authorization: Bearer {{token}}
+Accept: application/json
+
+
+### 17. Comprobar que el carrito sigue teniendo el producto
+GET {{baseUrl}}/cart
+Authorization: Bearer {{token}}
+Accept: application/json
+
+
+### 18. Comprobar que NO se creó una nueva orden
+GET {{baseUrl}}/orders
+Authorization: Bearer {{token}}
+Accept: application/json

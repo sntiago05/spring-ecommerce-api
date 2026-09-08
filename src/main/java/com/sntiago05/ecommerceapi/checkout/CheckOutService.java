@@ -7,6 +7,7 @@ import com.sntiago05.ecommerceapi.config.CurrentUserService;
 import com.sntiago05.ecommerceapi.order.dto.OrderResponse;
 import com.sntiago05.ecommerceapi.order.entity.Order;
 import com.sntiago05.ecommerceapi.order.entity.OrderItem;
+import com.sntiago05.ecommerceapi.order.entity.OrderStatus;
 import com.sntiago05.ecommerceapi.order.event.OrderEvent;
 import com.sntiago05.ecommerceapi.order.event.OrderItemEvent;
 import com.sntiago05.ecommerceapi.order.service.OrderService;
@@ -58,7 +59,7 @@ public class CheckOutService {
                             .product(item.getProduct())
                             .quantity(item.getQuantity())
                             .unitPrice(item.getProduct().getPrice())
-                            .subtotal(item.calculateSubTotal())
+                            .subTotal(item.calculateSubTotal())
                             .order(order)
                             .build()
             );
@@ -66,6 +67,7 @@ public class CheckOutService {
         });
         order.setUser(cart.getUser());
         order.setTotal(cart.calculateTotal());
+        order.setStatus(OrderStatus.PENDING);
         Order newOrder = orderService.saveOrder(order);
         cart.getItems().clear();
 
@@ -79,7 +81,7 @@ public class CheckOutService {
                 item.getProduct().getId(),
                 item.getProduct().getName(),
                 item.getQuantity(),
-                item.getSubtotal()
+                item.getSubTotal()
         )).toList(), newOrder.getTotal());
     }
 }

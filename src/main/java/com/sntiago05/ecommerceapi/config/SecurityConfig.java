@@ -44,11 +44,12 @@ public class SecurityConfig {
                         a.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/cart/**").authenticated()
                                 .requestMatchers("/checkout/**").authenticated()
+                                .requestMatchers("/order/**").authenticated()
                                 .requestMatchers(GET, "/products/**").authenticated()
                                 .requestMatchers(POST, "/products/**").hasRole("ADMIN")
                                 .requestMatchers(PATCH, "/products/**").hasRole("ADMIN")
                                 .requestMatchers(DELETE, "/products/**").hasRole("ADMIN")
-                                .anyRequest().permitAll())
+                                .anyRequest().denyAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
