@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
-public class GlobalHandlerExeception {
+public class GlobalHandlerException {
 
     @ExceptionHandler(BusinessException.class)
     public ProblemDetail handleBusinessException(BusinessException ex) {
