@@ -41,6 +41,7 @@ public class UserService {
         if (!encoder.matches(loginRequest.password(), user.getPassword()))
             throw new UserInvalidCredentialsException();
         String token = jwtService.generateToken(user.getEmail(), user.getRole());
+
         return AuthResponse.fromString(token);
     }
     

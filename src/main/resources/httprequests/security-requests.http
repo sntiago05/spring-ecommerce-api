@@ -1,0 +1,140 @@
+@baseUrl = http://localhost:8080
+
+# Paste the CUSTOMER JWT here
+@customerToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYW50aWFnb0B0ZXN0LmNvbSIsInJvbGUiOiJDVVNUT01FUiIsImlhdCI6MTc4ODgyOTUwMSwiZXhwIjoxNzg4ODMwNDAxfQ.rOOtuslwbyJqbiduNQA9TPupCGWxcdkmXLN9HyQugBhhFKOcp2US5O0CZ2T34prCr-KtAe-9ZWt4lajkm7ZzDQ
+
+
+# Paste the ADMIN JWT here
+@adminToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc4ODgyNzUxOSwiZXhwIjoxNzg4ODI4NDE5fQ.8b2rifOOWkfrxxlXttxbQQYY6KoQ16HbcKXRpT4BjVGSElvkeptbW76o6PrPZcxGUw4-814weZVQy9dy1LiRJA
+
+
+### 1. CUSTOMER - Get all products
+### Expected: 200 OK
+
+GET {{baseUrl}}/products
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+
+### 2. CUSTOMER - Get a specific product
+### Expected: 200 OK
+
+GET {{baseUrl}}/products/1
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+
+### 3. CUSTOMER - Get cart
+### Expected: 200 OK
+
+GET {{baseUrl}}/cart
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+
+### 4. CUSTOMER - Get orders
+### Expected: 200 OK
+
+GET {{baseUrl}}/orders
+Authorization: Bearer {{customerToken}}
+Accept: application/json
+
+
+### 5. CUSTOMER - Attempt to create a product
+### Expected: 403 Forbidden
+
+POST {{baseUrl}}/products
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "name": "Unauthorized Product 2",
+  "description": "Authorization test",
+  "price": 10000,
+  "stock": 10
+}
+
+
+### 6. CUSTOMER - Attempt to modify a product
+### Expected: 403 Forbidden
+
+PATCH {{baseUrl}}/products/1
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "price": 99999
+}
+
+
+### 7. CUSTOMER - Attempt to delete a product
+### Expected: 403 Forbidden
+
+DELETE {{baseUrl}}/products/1
+Authorization: Bearer {{customerToken}}
+
+
+### 8. ADMIN - Create a product
+### Expected: 201 Created
+
+POST {{baseUrl}}/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "name": "Admin Test Product",
+  "description": "Product created by ADMIN",
+  "price": 50000,
+  "stock": 10
+}
+
+
+### 9. ADMIN - Modify a product
+### Expected: 200 OK
+
+PATCH {{baseUrl}}/products/1
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "price": 75000
+}
+
+
+### 10. ADMIN - Delete a product
+### Expected: 204 No Content
+
+DELETE {{baseUrl}}/products/1
+Authorization: Bearer {{adminToken}}
+
+
+### 11. NO TOKEN - Get cart
+### Expected: 401 Unauthorized
+
+GET {{baseUrl}}/cart
+
+
+### 12. NO TOKEN - Checkout
+### Expected: 401 Unauthorized
+
+POST {{baseUrl}}/checkout
+
+
+### 13. NO TOKEN - Get orders
+### Expected: 401 Unauthorized
+
+GET {{baseUrl}}/orders
+
+
+### 14. INVALID TOKEN
+### Expected: 401 Unauthorized
+
+GET {{baseUrl}}/cart
+Authorization: Bearer fake-token
+
+
+### 15. MALFORMED TOKEN
+### Expected: 401 Unauthorized
+
+GET {{baseUrl}}/cart
+Authorization: Basic fake-token

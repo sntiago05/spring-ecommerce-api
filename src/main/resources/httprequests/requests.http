@@ -2,18 +2,16 @@
 @token = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYW50aWFnb0B0ZXN0LmNvbSIsInJvbGUiOiJDVVNUT01FUiIsImlhdCI6MTc4ODgyNjA3OCwiZXhwIjoxNzg4ODI2OTc4fQ.zPV3fjWCfdkx9dqtiLsNqmuo1Pxlx6IKxFB1Iex2L1xYMfh5juoRjsIZ-q2KVikngRyuC_sJ7io7vw18AWjF9w
 
 
-### ==========================================
 ### AUTH
-### ==========================================
 
-### 1. Registrar usuario
-### Crea User + Cart
+### 1. Register user
+### Creates User + Cart
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
   "userName": "santiago",
-  "email": "santiago@test.com",
+  "email": "admin@mail.com",
   "password": "password123"
 }
 
@@ -28,33 +26,29 @@ Content-Type: application/json
 }
 
 
-### ==========================================
 ### PRODUCTS
-### ==========================================
 
-### 3. Obtener productos
+### 3. Get all products
 GET {{baseUrl}}/products
 Authorization: Bearer {{token}}
 Accept: application/json
 
 
-### 4. Obtener producto específico
+### 4. Get a specific product
 GET {{baseUrl}}/products/1
 Authorization: Bearer {{token}}
 Accept: application/json
 
 
-### ==========================================
 ### CART
-### ==========================================
 
-### 5. Obtener mi carrito
+### 5. Get my cart
 GET {{baseUrl}}/cart
 Authorization: Bearer {{token}}
 Accept: application/json
 
 
-### 6. Agregar Laptop x2
+### 6. Add Laptop x2
 POST {{baseUrl}}/cart
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -65,7 +59,7 @@ Content-Type: application/json
 }
 
 
-### 7. Agregar Mouse x3
+### 7. Add Mouse x3
 POST {{baseUrl}}/cart
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -76,14 +70,14 @@ Content-Type: application/json
 }
 
 
-### 8. Consultar carrito
+### 8. Get cart details
 GET {{baseUrl}}/cart
 Authorization: Bearer {{token}}
 Accept: application/json
 
 
-### 9. Actualizar cantidad de un CartItem
-### Cambia el ID según el CartItem creado
+### 9. Update CartItem quantity
+### Note: Update the ID below to match the actual CartItem ID
 PATCH {{baseUrl}}/cart/items/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -93,44 +87,42 @@ Content-Type: application/json
 }
 
 
-### 10. Eliminar un CartItem
-### Cambia el ID según corresponda
+### 10. Remove a CartItem
+### Note: Update the ID below to match the actual CartItem ID
 DELETE {{baseUrl}}/cart/items/1
 Authorization: Bearer {{token}}
 
 
-### 11. Vaciar carrito
+### 11. Clear cart
 DELETE {{baseUrl}}/cart
 Authorization: Bearer {{token}}
 
 
-### ==========================================
 ### CHECKOUT
-### ==========================================
 
-### 12. Checkout exitoso
-### NO necesita cartId
+### 12. Successful checkout
+### No cartId is required
 POST {{baseUrl}}/checkout
 Authorization: Bearer {{token}}
 Accept: application/json
 
 
-### 13. Intentar checkout nuevamente
-### Debe fallar porque el carrito quedó vacío
+### 13. Attempt checkout again
+### Expected to fail because the cart is now empty
 POST {{baseUrl}}/checkout
 Authorization: Bearer {{token}}
 Accept: application/json
 
 
-### ==========================================
 ### ORDERS
-### ==========================================
 
-### 14. Consultar mis órdenes
+### 14. Get my orders
 GET {{baseUrl}}/orders
 Authorization: Bearer {{token}}
 Accept: application/json
-### 15. Agregar producto sin stock
+
+
+### 15. Add out-of-stock product
 POST {{baseUrl}}/cart
 Authorization: Bearer {{token}}
 Content-Type: application/json
@@ -141,20 +133,20 @@ Content-Type: application/json
 }
 
 
-### 16. Checkout con producto sin stock
-### Debe fallar
+### 16. Checkout with out-of-stock product
+### Expected to fail
 POST {{baseUrl}}/checkout
 Authorization: Bearer {{token}}
 Accept: application/json
 
 
-### 17. Comprobar que el carrito sigue teniendo el producto
+### 17. Verify the product remains in the cart
 GET {{baseUrl}}/cart
 Authorization: Bearer {{token}}
 Accept: application/json
 
 
-### 18. Comprobar que NO se creó una nueva orden
+### 18. Verify no new order was created
 GET {{baseUrl}}/orders
 Authorization: Bearer {{token}}
 Accept: application/json

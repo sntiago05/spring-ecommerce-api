@@ -1,6 +1,8 @@
 package com.sntiago05.ecommerceapi.config;
 
 import com.sntiago05.ecommerceapi.filters.JwtFilter;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,11 +39,20 @@ public class SecurityConfig {
      * @return the configured {@link SecurityFilterChain} instance
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint((request, response, exception) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+                        )
+                        .accessDeniedHandler((request, response, exception) ->
+                                response.sendError(HttpServletResponse.SC_FORBIDDEN)
+                        )
+                )
                 .authorizeHttpRequests(a ->
-                        a.requestMatchers("/auth/**").permitAll()
+                        a.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
+                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/cart/**").authenticated()
                                 .requestMatchers("/checkout/**").authenticated()
                                 .requestMatchers("/orders/**").authenticated()

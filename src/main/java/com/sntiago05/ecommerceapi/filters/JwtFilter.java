@@ -31,14 +31,15 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         String token = header.substring(7);
         try {
-
             JwtClaim credentials = jwtService.extractClaims(token);
             if (credentials.email() != null && credentials.role() != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(credentials.email(), null, List.of(new SimpleGrantedAuthority("ROLE_" + credentials.role())));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-        } catch (JwtException | IllegalArgumentException ignored) {}
+        } catch (JwtException | IllegalArgumentException ex) {
+            logger.error("Invalid JWT Token\r" + ex.getMessage());
+        }
         filterChain.doFilter(request, response);
     }
 }
