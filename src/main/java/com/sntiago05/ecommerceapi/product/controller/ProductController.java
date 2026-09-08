@@ -1,5 +1,6 @@
 package com.sntiago05.ecommerceapi.product.controller;
 
+import com.sntiago05.ecommerceapi.product.dto.PageResponse;
 import com.sntiago05.ecommerceapi.product.dto.ProductCreateRequest;
 import com.sntiago05.ecommerceapi.product.dto.ProductResponse;
 import com.sntiago05.ecommerceapi.product.dto.ProductUpdateRequest;
@@ -33,8 +34,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponse>> findAll(@PageableDefault(size = 20, page = 0) Pageable pageable) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAll(pageable));
+    public ResponseEntity<PageResponse<ProductResponse>> findAll(Pageable pageable) {
+        return ResponseEntity.ok(
+                PageResponse.from(service.findAll(pageable))
+        );
     }
 
     @PatchMapping("/{id}")
