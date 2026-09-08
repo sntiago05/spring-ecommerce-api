@@ -44,7 +44,7 @@ public class SecurityConfig {
                         a.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/cart/**").authenticated()
                                 .requestMatchers("/checkout/**").authenticated()
-                                .requestMatchers("/order/**").authenticated()
+                                .requestMatchers("/orders/**").authenticated()
                                 .requestMatchers(GET, "/products/**").authenticated()
                                 .requestMatchers(POST, "/products/**").hasRole("ADMIN")
                                 .requestMatchers(PATCH, "/products/**").hasRole("ADMIN")
