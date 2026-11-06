@@ -27,9 +27,9 @@ Ejemplos de peticiones en `src/main/resources/httprequests/`.
 La conexión a PostgreSQL está en `src/main/resources/application.properties`.
 
 
-## Deuda técnica y limitaciones conocidas
+## Deuda técnica
 
-- **Secretos en el repositorio (prioridad alta):** `src/main/resources/application.properties` contiene la contraseña de la base de datos y el secreto JWT en texto plano. Hay que rotarlos y moverlos a variables de entorno. Mientras tanto, considera ese secreto como comprometido.
+- **Credenciales de prueba en el repositorio:** `src/main/resources/application.properties` contiene la contraseña de la base de datos y el secreto JWT de prueba en texto plano. Lo correcto es leerlos desde variables de entorno.
 - **Pruebas:** solo existe `EcommerceApiApplicationTests` (carga de contexto). No hay pruebas de servicios, controladores ni de reglas de seguridad.
 - **Codificación de la clave JWT:** `JwtService` usa `secret.getBytes()` sin indicar charset, y el nombre del método `getSinginKey` tiene una errata.
 - **Ejemplos HTTP:** `requests.http` contiene contraseñas de ejemplo. Son solo para desarrollo local.
